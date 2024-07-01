@@ -4,7 +4,7 @@ const nextConfig = {
         domains : ['https://cdn-icons-png.flaticon.com'],
         unoptimized:true
     },
-    reactStrictMode:false
+    reactStrictMode:false,
 };
 
 export default nextConfig;
