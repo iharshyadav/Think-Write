@@ -16,16 +16,23 @@ interface PROPS {
 function FormSection({ selectedTemplate,userFormInput,loading }: PROPS) {
 
     const [formData,setFormData]=useState<any>();
+    const [input1, setinput1] = useState("")
+    const [input2, setinput2] = useState("")
 
     const handleInputChange=(event:any)=>{
         const {name,value}=event.target;
         setFormData({...formData,[name]:value})
     }
 
+   
+
     const onSubmit=(e:any)=>{
         e.preventDefault();
-        console.log(formData);
-        userFormInput(formData)
+        console.log(input1,input2);
+        userFormInput({
+          input1,
+          input2
+        })
     }
 
     return (
@@ -45,7 +52,9 @@ function FormSection({ selectedTemplate,userFormInput,loading }: PROPS) {
                 <Input
                   name={item.name}
                   required={item?.required}
-                  onChange={handleInputChange}
+                  onChange={(e) => setinput1(e.target.value)}
+                  id='niche'
+                  value={input1}
                 />
               ) : item.field == "textarea" ? (
                 <>
@@ -54,7 +63,9 @@ function FormSection({ selectedTemplate,userFormInput,loading }: PROPS) {
                     required={item?.required}
                     rows={5}
                     maxLength={2000}
-                    onChange={handleInputChange}
+                    onChange={(e) => setinput2(e.target.value)}
+                    id='outline'
+                    value={input2}
                   />
                   <label className="text-xs text-gray-400">
                     Note:Max 2000 Words

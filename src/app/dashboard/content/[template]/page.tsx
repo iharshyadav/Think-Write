@@ -10,6 +10,10 @@ import Template from '@/app/(data)/Template'
 import { TEMPLATE } from '../../components/TemplateListSection'
 import { chatSession } from '@/utils/AiModel'
 import {connectToDB} from '@/utils/database'
+import AISchemaDB from '@/utils/schema'
+import axios from 'axios'
+import { useUser } from '@clerk/nextjs'
+// import AISchemaDB from '@/utils/schema'
 
 interface PROPS{
   params:{
@@ -22,8 +26,9 @@ const Page = (props:PROPS) => {
   const [loading,setLoading]=useState(false);
   const [outputAIData, setOutputAIData] = useState<string>("")
 
+  const { user } = useUser()
+
   useEffect(() => {
-    connectToDB();
   },[])
 
 
@@ -35,16 +40,48 @@ const Page = (props:PROPS) => {
       const selectedPrompt = selectedTemplate?.aiPrompt;
       const FinalAIPrompt = JSON.stringify(formData) + ", " + selectedPrompt;
       const sendMessageToAI = await chatSession.sendMessage(FinalAIPrompt);
-      if (sendMessageToAI && sendMessageToAI.response) {
-        const responseText = await sendMessageToAI.response.text(); // Ensure this is awaited
-        setOutputAIData(responseText);
-      } else {
-        console.log("Response or sendMessageToAI is undefined");
-      }
+      
+        const responseText = await sendMessageToAI?.response.text(); // Ensure this is awaited
+         setOutputAIData(responseText);
+        // console.log(outputAIData)
+        const parsedFormData = JSON.parse(JSON.stringify(formData));
+        await saveToDB(parsedFormData, responseText, selectedTemplate?.slug);
     } catch (error) {
       console.error("Error in generateAIContent:", error);
     }
+  }
+
+  const saveToDB = async (formData:any , aiResponse:string,slug:any) => {
+
+   try {
+    await connectToDB();
+    console.log("first")
+    const {input1 , input2} = formData;
+    console.log(input1,input2,slug,aiResponse)
+    await axios.post('/api/appli',{
+      input1,
+      input2,
+      aiResponse,
+      slug,
+      user:user?.primaryEmailAddress?.emailAddress
+    }).then(() => {
+      console.log("success")
     setLoading(false);
+    }).catch((e:any) => {
+      console.log(e)
+    })
+    // const dbAI = await AISchemaDB.create({
+    //   niche: input1,
+    //   outline: input2,
+    //   aiResponse,
+    //   slug,
+    //   // createdBy : "hatsh"
+    // });
+
+    // console.log(dbAI)
+   } catch (error) {
+    console.log("failed to save data")
+   }
   }
   return (
     <div className='p-5'>
