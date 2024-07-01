@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from 'react'
 import TemplateCard from './TemplateCard'
 import Template from '@/app/(data)/Template'
@@ -21,12 +22,26 @@ export interface FORM{
 
 function TemplateListSection({userSearchInput}:any) {
 
-  
+  const [templateList, setTemplateList] = useState(Template)
+
+  useEffect(() =>{
+     
+     if(userSearchInput){
+      const filteredList = Template.filter((val) => 
+        val.name.toLowerCase().includes(userSearchInput.toLowerCase())
+      )
+
+      setTemplateList(filteredList);
+     }else{
+      setTemplateList(Template)
+     }
+
+  },[userSearchInput])
 
 
   return (
     <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 p-10'>
-        {Template.map((item:TEMPLATE,index:number)=>(
+        {templateList.map((item:TEMPLATE,index:number)=>(
             <TemplateCard key={index} {...item} />
         ))}
     </div>
