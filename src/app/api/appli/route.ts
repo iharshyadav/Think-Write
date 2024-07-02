@@ -1,5 +1,5 @@
 import { connectToDB } from "@/utils/database";
-import AISchemaD from "@/utils/schema";
+import AISchemadetails from "@/utils/schema";
 import { NextRequest, NextResponse } from "next/server";
 
 interface PROPS {
@@ -20,7 +20,7 @@ export async function POST (req:NextRequest,res:NextResponse) {
         await connectToDB();
 
 
-    const dbAI = await AISchemaD.create({
+    const dbAI = await AISchemadetails.create({
         input1,
         input2,
         aiResponse,

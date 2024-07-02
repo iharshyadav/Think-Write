@@ -31,14 +31,19 @@ const AISchema = new Schema<AISchemaDocument>({
     type: String,
     required: true,
   }
+},
+{
+  timestamps : true
 });
 
-// Define the Mongoose model
-let AISchemaD: Model<AISchemaDocument>;
-try {
-  AISchemaD = mongoose.model<AISchemaDocument>('AISchemaD', AISchema);
-} catch (error) {
-  AISchemaD = mongoose.models.AISchemaDB as Model<AISchemaDocument>;
-}
+const AISchemadetails = mongoose.models.AISchemadetails || mongoose.model("AISchemadetails",AISchema);
 
-export default AISchemaD;
+// Define the Mongoose model
+// let AISchemaD: Model<AISchemaDocument>;
+// try {
+//   AISchemaD = mongoose.model<AISchemaDocument>('AISchemaD', AISchema);
+// } catch (error) {
+//   AISchemaD = mongoose.models.AISchemaDB as Model<AISchemaDocument>;
+// }
+
+export default AISchemadetails;
