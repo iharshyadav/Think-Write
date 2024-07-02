@@ -1,14 +1,6 @@
 import { connectToDB } from "@/utils/database";
 import AISchemadetails from "@/utils/schema";
-import { NextRequest, NextResponse } from "next/server";
-
-interface PROPS {
-    name : string
-    aiResponse :string
-    createdBy : string
-    slug : string
-
-}
+import { NextRequest, NextResponse } from "next/server"
 
 
 export async function POST (req:NextRequest,res:NextResponse) {
@@ -26,14 +18,11 @@ export async function POST (req:NextRequest,res:NextResponse) {
         aiResponse,
         slug,
         user
-        // createdBy : "hatsh"
       });
-    // console.log(dbAI)
 
     return NextResponse.json({
         dbAI
     })
-    // console.log(name,aiResponse,createdBy,slug)
    } catch (error) {
      return NextResponse.json({
         msg:"error something"

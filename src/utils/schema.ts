@@ -1,4 +1,5 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
+import { connectToDB } from './database';
 
 // Define the interface for your document
 interface AISchemaDocument extends Document {
@@ -35,6 +36,7 @@ const AISchema = new Schema<AISchemaDocument>({
 {
   timestamps : true
 });
+
 
 const AISchemadetails = mongoose.models.AISchemadetails || mongoose.model("AISchemadetails",AISchema);
 

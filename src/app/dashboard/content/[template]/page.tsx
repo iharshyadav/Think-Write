@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { FC, useEffect, useState } from 'react'
+import { FC, useContext, useEffect, useState } from 'react'
 import FormSection from '../components/FormSection'
 import OutputSection from '../components/OutputSection'
 import { ArrowLeft } from 'lucide-react'
@@ -13,6 +13,8 @@ import {connectToDB} from '@/utils/database'
 import AISchemaDB from '@/utils/schema'
 import axios from 'axios'
 import { useUser } from '@clerk/nextjs'
+import { TotalUsageContext } from '@/app/(context)/TotalUsageContext'
+import { useRouter } from 'next/navigation'
 // import AISchemaDB from '@/utils/schema'
 
 interface PROPS{
@@ -25,6 +27,8 @@ const Page = (props:PROPS) => {
 
   const [loading,setLoading]=useState(false);
   const [outputAIData, setOutputAIData] = useState<string>("")
+  const {limit, setLimit} = useContext(TotalUsageContext)
+  const router = useRouter();
 
   const { user } = useUser()
 
@@ -37,6 +41,13 @@ const Page = (props:PROPS) => {
 
     setLoading(true)
     try {
+      if(limit >= 10000){
+        console.log("error to generate")
+        setLoading(false)
+        router.push('/dashboard/billing')
+        return
+      }
+      
       const selectedPrompt = selectedTemplate?.aiPrompt;
       const FinalAIPrompt = JSON.stringify(formData) + ", " + selectedPrompt;
       const sendMessageToAI = await chatSession.sendMessage(FinalAIPrompt);
