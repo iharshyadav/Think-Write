@@ -162,7 +162,7 @@ const Billing: FC<pageProps> = ({}) => {
       </h2>
 
       <p className="mt-2 sm:mt-4">
-        <strong className="text-3xl font-bold text-gray-900 sm:text-4xl"> 100₹ </strong>
+        <strong className="text-3xl font-bold text-gray-900 sm:text-4xl"> 1000₹ </strong>
 
         <span className="text-sm font-medium text-gray-700">/month</span>
       </p>
@@ -230,7 +230,7 @@ const Billing: FC<pageProps> = ({}) => {
       </li>
     </ul>
     <Button
-    disabled={loading}
+      disabled={loading}
       onClick={()=>CreateSubscription()}
       className='w-full rounded-full mt-5 p-6'
       variant='outline'

@@ -1,4 +1,5 @@
 // import { UserButton } from '@clerk/nextjs'
+import { UserButton } from '@clerk/nextjs'
 import { Search } from 'lucide-react'
 import React from 'react'
 
@@ -14,8 +15,9 @@ function Header() {
       </div>
       <div className='flex gap-5 items-center'>
         <h2 className='bg-primary p-1 rounded-full text-sm text-white px-2'>
-         Think-Write</h2>
-      {/* <UserButton/> */}
+         Think-Write
+         </h2>
+      <UserButton />
       </div>
     </div>
   )

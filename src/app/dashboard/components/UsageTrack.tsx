@@ -2,22 +2,14 @@
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext';
 import { Button } from '@/components/ui/button'
 import { countWords } from '@/lib/action';
+import Link from 'next/link';
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 
 
- function UsageTrack() {
-
+function UsageTrack() {
+  
   const {limit, setLimit} = useContext(TotalUsageContext)
 
-  useEffect(() => {
-   render();
-  },[])
-
-
-  const render = async () =>{
-    const track : number | undefined = await countWords();
-    setLimit(track)
-  }
 
  const maxWords = 10000
  
@@ -34,7 +26,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
             </div>
             <h2 className='text-sm my-2'>{limit}/{maxWords} credit used</h2>
         </div>
-        <Button variant={'secondary'} className='w-full my-3 text-primary'>Upgrade</Button>
+        <Link href='/dashboard/billing'><Button variant={'secondary'} className='w-full my-3 text-primary'>Upgrade</Button></Link>
     </div>
   )
 }

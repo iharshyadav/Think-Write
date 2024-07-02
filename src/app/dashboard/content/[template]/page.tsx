@@ -15,6 +15,7 @@ import axios from 'axios'
 import { useUser } from '@clerk/nextjs'
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext'
 import { useRouter } from 'next/navigation'
+import { countWords } from '@/lib/action'
 // import AISchemaDB from '@/utils/schema'
 
 interface PROPS{
@@ -32,7 +33,14 @@ const Page = (props:PROPS) => {
 
   const { user } = useUser()
 
+  const render = async () =>{
+    const track : number | undefined = await countWords();
+    setLimit(track)
+    console.log(track)
+  }
+
   useEffect(() => {
+    render();
   },[])
 
 
@@ -57,6 +65,7 @@ const Page = (props:PROPS) => {
         // console.log(outputAIData)
         const parsedFormData = JSON.parse(JSON.stringify(formData));
         await saveToDB(parsedFormData, responseText, selectedTemplate?.slug);
+        render();
     } catch (error) {
       console.error("Error in generateAIContent:", error);
     }

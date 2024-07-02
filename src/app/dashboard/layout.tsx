@@ -1,8 +1,9 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SideNav from './components/SideNav';
 import Header from './components/Header';
 import { TotalUsageContext } from '../(context)/TotalUsageContext';
+import { countWords } from '@/lib/action';
 
 function Layout({
     children,
@@ -11,6 +12,16 @@ function Layout({
   }>) {
 
     const [limit, setLimit] = useState<number | undefined>(0)
+
+    const render = async () =>{
+      const track : number | undefined = await countWords();
+      setLimit(track)
+      console.log(track)
+    }
+  
+    useEffect(() => {
+      render();
+    },[])
 
   return (
    <TotalUsageContext.Provider value={{
