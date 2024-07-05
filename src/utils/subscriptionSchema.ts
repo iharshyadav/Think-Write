@@ -1,42 +1,37 @@
-import mongoose, { Document, Model, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
 
 interface AISchemaDocument extends Document {
-  input1: string;
-  input2: string;
-  aiResponse: string;
-  slug: string;
-  user: string
+  email: string;
+  userName: string;
+  active: boolean;
+  paymentId: string,
 }
 
-const AISchema = new Schema<AISchemaDocument>({
-  input1: {
+const subscriptionSchema = new Schema<AISchemaDocument>({
+  email: {
     type: String,
     required: true,
   },
-  input2: {
+  userName: {
     type: String,
     required: true,
   },
-  aiResponse: {
+  active: {
+    type: Boolean,
+    required: true,
+  },
+  paymentId : {
     type: String,
     required: true,
   },
-  slug: {
-    type: String,
-    required: true,
-  },
-  user : {
-    type: String,
-    required: true,
-  }
 },
 {
   timestamps : true
 });
 
 
-const AISchemadetails = mongoose.models.AISchemadetails || mongoose.model("AISchemadetails",AISchema);
+const SaveSubscriptionDetails = mongoose.models.SaveSubscriptionDetails || mongoose.model("SaveSubscriptionDetails",subscriptionSchema);
 
 // Define the Mongoose model
 // let AISchemaD: Model<AISchemaDocument>;
@@ -46,4 +41,4 @@ const AISchemadetails = mongoose.models.AISchemadetails || mongoose.model("AISch
 //   AISchemaD = mongoose.models.AISchemaDB as Model<AISchemaDocument>;
 // }
 
-export default AISchemadetails;
+export default SaveSubscriptionDetails;

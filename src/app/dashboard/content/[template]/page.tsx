@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { FC, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import FormSection from '../components/FormSection'
 import OutputSection from '../components/OutputSection'
 import { ArrowLeft } from 'lucide-react'
@@ -10,13 +10,11 @@ import Template from '@/app/(data)/Template'
 import { TEMPLATE } from '../../components/TemplateListSection'
 import { chatSession } from '@/utils/AiModel'
 import {connectToDB} from '@/utils/database'
-import AISchemaDB from '@/utils/schema'
 import axios from 'axios'
 import { useUser } from '@clerk/nextjs'
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext'
 import { useRouter } from 'next/navigation'
-import { countWords } from '@/lib/action'
-// import AISchemaDB from '@/utils/schema'
+import { checkUserSubscription, countWords } from '@/lib/action'
 
 interface PROPS{
   params:{
@@ -36,7 +34,7 @@ const Page = (props:PROPS) => {
   const render = async () =>{
     const track : number | undefined = await countWords();
     setLimit(track)
-    console.log(track)
+    // console.log(track)
   }
 
   useEffect(() => {
@@ -49,7 +47,9 @@ const Page = (props:PROPS) => {
 
     setLoading(true)
     try {
-      if(limit >= 10000){
+      const checkSubscription = await checkUserSubscription();
+      console.log(checkSubscription)
+      if(limit >= 10000 && !checkSubscription){
         console.log("error to generate")
         setLoading(false)
         router.push('/dashboard/billing')

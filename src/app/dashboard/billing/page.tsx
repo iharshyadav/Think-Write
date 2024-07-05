@@ -1,5 +1,6 @@
 "use client"
 import { Button } from '@/components/ui/button'
+import { saveSubcription } from '@/lib/action'
 import axios from 'axios'
 import { Loader2Icon } from 'lucide-react'
 import Script from 'next/script'
@@ -24,15 +25,29 @@ const Billing: FC<pageProps> = ({}) => {
     })
   }
 
-  const OnPayment=async(subId:string)=>{
-  //   const res = await loadScript(
-  //     "https://checkout.razorpay.com/v1/checkout.js"
-  //  );
+  const loadScript = (src:any) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
 
-  //  if (!res) {
-  //     alert("Razropay failed to load!!");
-  //     return;
-  // }
+  const OnPayment=async(subId:string)=>{
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+   );
+
+   if (!res) {
+      alert("Razropay failed to load!!");
+      return;
+  }
     const options={
       "key":process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       "subscription_id":subId,
@@ -40,10 +55,16 @@ const Billing: FC<pageProps> = ({}) => {
       description:'Monthly Subscription',
       handler:async(resp:any)=>{
         console.log(resp);
-        // if(resp)
-        //   {
-        //     SaveSubcription(resp?.razorpay_payment_id)
-        //   }
+        if(resp)
+          {
+            const status = await saveSubcription(resp?.razorpay_payment_id)
+            if(status === true) {
+                  if (typeof window !== 'undefined') {
+                    // @ts-ignore
+                    window.location.reload();
+                  }
+            }
+          }
         setLoading(false);
       }
     }
@@ -59,6 +80,8 @@ const Billing: FC<pageProps> = ({}) => {
         setLoading(false);
     }
   }
+  
+  
 
   return (
     <div>
